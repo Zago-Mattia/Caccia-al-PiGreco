@@ -6,6 +6,8 @@ int button3 = 8;
 int button4 = 7;  
 int button5 = 6;  
 int risF;
+int continua=1;
+int Npartita=1;
 
 byte Cuore[8] =
 {
@@ -42,13 +44,13 @@ byte Omega[8] =
 };
 byte Smile[8] = 
 {
-  B00000,
-  B10001,
-  B00000,
-  B00000,
-  B10001,
-  B01110,
-  B00000
+        B00000,
+        B10001,
+        B00000,
+        B00000,
+        B10001,
+        B01110,
+        B00000
 };
 
 
@@ -66,13 +68,19 @@ void setup()
   lcd.createChar(2,PiGreco);
   lcd.createChar(3,Omega);
   lcd.createChar(4,Smile);
-
-  Inizio();
 }
 
 void loop() 
 {
+Inizio();
 Istruzioni();
+while(continua=1)
+{
+  Partita();
+  Npartita++;
+  Continuare();
+}
+
 }
 void Inizio()
 { 
@@ -98,8 +106,9 @@ void Inizio()
    lcd.print("Avvio gioco in ");
    lcd.setCursor(0,1);
    lcd.print("corso          ");
+   delay(1000);
 }
-void Istruzioni()  // da rifare con nuovi caratteri
+void Istruzioni()  
 {
   lcd.clear();
   lcd.setCursor(0,0);
@@ -156,5 +165,37 @@ void Istruzioni()  // da rifare con nuovi caratteri
   lcd.setCursor(14,0); 
   lcd.write(byte(4));
   delay(1250);
-  
+}
+void Partita()
+{
+   lcd.clear();
+   lcd.setCursor(0,0);
+   lcd.print("Avvio partita ");
+   lcd.setCursor(0,1);
+   lcd.print("in corso      ");
+   delay(1000);
+}
+void Continuare()
+{
+   lcd.setCursor(0,0);
+   lcd.print("Ahia,hai perso");
+   lcd.setCursor(0,1);
+   lcd.print("vuoi riprovare");
+   delay(1000);
+   lcd.setCursor(0,1);
+   lcd.print("a vincere?    ");
+   delay(1000);
+   lcd.setCursor(0,0);
+   lcd.print("btn1 - Riprova");
+   lcd.setCursor(0,1);
+   lcd.print("btn2 - Riavvio");
+   while(button1==LOW && button2==LOW)
+   {}
+   if (button2=HIGH)
+   {
+    continua++;
+   }
+   
+
+   
 }
