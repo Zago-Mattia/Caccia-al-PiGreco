@@ -6,7 +6,7 @@ int button3 = 8;
 int button4 = 7;  
 int button5 = 6;  
 int risF;
-int continua=1;
+int continua=0;
 int Npartita=1;
 
 byte Cuore[8] =
@@ -73,8 +73,8 @@ void setup()
 void loop() 
 {
 Inizio();
-Istruzioni();
-while(continua=1)
+//Istruzioni();
+while(continua==0)
 {
   Partita();
   Npartita++;
@@ -84,6 +84,7 @@ while(continua=1)
 }
 void Inizio()
 { 
+  continua=0;
   lcd.setCursor(0,0);
   lcd.print("< Caccia al    >");
   lcd.setCursor(12,0); 
@@ -174,7 +175,126 @@ void Partita()
    lcd.setCursor(0,1);
    lcd.print("in corso      ");
    delay(1000);
-}
+   lcd.clear();
+   lcd.setCursor(0,0);
+   lcd.print("Partita       ");
+   lcd.setCursor(13,0);
+   lcd.print(Npartita);
+   delay(1500);
+   
+   int vita = 3;
+   int omega =0;
+   int pigreco =0;
+   int jolly =0;
+   int contatore = 1;
+   int tempo = 4000;
+   bool presjolly = false;
+
+  while (vita>0)
+  {
+   if (contatore==19)
+   {
+     lcd.clear();
+     lcd.setCursor(0,0);
+     lcd.print("COMPLIMENTI   ");
+     lcd.setCursor(0,1);
+     lcd.print("HAI VINTO!!!  ");
+     delay(1000);
+     return;
+   }
+   else if(contatore==6|| contatore ==12 || contatore==18)
+   {
+    presjolly = true;
+   }
+
+   if (presjolly==false)
+   {
+     bool controllo = true;
+     while(controllo==true)
+     {
+        omega = random(0,4);
+        pigreco = random(0,4);
+       if (omega!=pigreco)
+       {
+        controllo=false;
+       }
+     }
+     if (vita>5)
+     {
+      vita=5;
+     }
+     lcd.clear();
+     for (int i=0;i<vita;i++)
+     {
+       lcd.setCursor(15-i,0);
+       lcd.write(byte(1));  
+     }
+       
+    if(pigreco ==0)
+    {
+       lcd.setCursor(1,1);
+       lcd.write(byte(2)); 
+    }  
+    else if(pigreco ==1)
+    {
+       lcd.setCursor(4,1);
+       lcd.write(byte(2)); 
+    } 
+    else if(pigreco ==2)
+    {
+       lcd.setCursor(7,1);
+       lcd.write(byte(2)); 
+    } 
+    else if(pigreco ==3)
+    {
+       lcd.setCursor(10,1);
+       lcd.write(byte(2)); 
+    } 
+    else if(pigreco ==4)
+    {
+       lcd.setCursor(13,1);
+       lcd.write(byte(2)); 
+    } 
+
+    if(omega ==0)
+    {
+       lcd.setCursor(1,1);
+       lcd.write(byte(3)); 
+    }  
+    else if(omega ==1)
+    {
+       lcd.setCursor(4,1);
+       lcd.write(byte(3)); 
+    } 
+    else if(omega ==2)
+    {
+       lcd.setCursor(7,1);
+       lcd.write(byte(3)); 
+    } 
+    else if(omega ==3)
+    {
+       lcd.setCursor(10,1);
+       lcd.write(byte(3)); 
+    } 
+    else if(omega ==4)
+    {
+       lcd.setCursor(13,1);
+       lcd.write(byte(3)); 
+    } 
+
+     delay(20000);
+
+
+      
+     }
+    
+
+     
+      
+   }
+   
+  }
+
 void Continuare()
 {
    lcd.setCursor(0,0);
@@ -189,9 +309,9 @@ void Continuare()
    lcd.print("btn1 - Riprova");
    lcd.setCursor(0,1);
    lcd.print("btn2 - Riavvio");
-   while(button1==LOW && button2==LOW)
+   while (digitalRead(button1) == LOW&&digitalRead(button2) == LOW)
    {}
-   if (button2=HIGH)
+   if (digitalRead(button2) == HIGH)
    {
     continua++;
    }
