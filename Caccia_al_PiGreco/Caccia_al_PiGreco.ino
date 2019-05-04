@@ -8,6 +8,7 @@ int button5 = 6;
 int risF;
 int continua=0;
 int Npartita=1;
+int ButtDisp[5][2] ={{6,0},{7,1},{8,2},{9,3},{13,4}};
 
 byte Cuore[8] =
 {
@@ -73,7 +74,7 @@ void setup()
 void loop() 
 {
 Inizio();
-//Istruzioni();
+Istruzioni();
 while(continua==0)
 {
   Partita();
@@ -282,9 +283,14 @@ void Partita()
        lcd.write(byte(3)); 
     } 
 
-     delay(20000);
-
-
+     delay(2000);
+   while (digitalRead(button1) == LOW&&digitalRead(button2) == LOW&&digitalRead(button3) == LOW&&digitalRead(button4) == LOW&&digitalRead(button5) == LOW)
+   {}
+   if (digitalRead(button2) == HIGH)
+   {
+    continua++;
+   }
+    
       
      }
     
