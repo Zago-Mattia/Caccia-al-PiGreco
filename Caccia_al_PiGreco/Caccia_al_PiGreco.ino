@@ -5,12 +5,11 @@ int button2 = 7;
 int button3 = 8;
 int button4 = 9;
 int button5 = 13;
-int vittoria =0;
-
+int vittoria = 0;
 int risF;
 int continua = 0;
 int Npartita = 1;
-int ButtDisp[5][2] = {{6, 0}, {7, 1}, {8, 2}, {9, 3}, {13, 4}};
+
 
 byte Cuore[8] =
 {
@@ -165,7 +164,7 @@ void Partita()
 
   while (vita > 0)
   {
-     if (contatore == 19)
+    if (contatore == 20)
     {
       lcd.clear();
       lcd.setCursor(0, 0);
@@ -176,15 +175,15 @@ void Partita()
       delay(1000);
       return;
     }
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Partita       ");
-      lcd.setCursor(13, 0);
-      lcd.print(contatore);
-      delay(750);
-      contatore++;
-      
-   
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Partita       ");
+    lcd.setCursor(13, 0);
+    lcd.print(contatore);
+    delay(750);
+    contatore++;
+
+
     if (!presjolly)
     {
       bool controllo = true; // assegnazione posizione
@@ -208,79 +207,79 @@ void Partita()
         lcd.write(byte(1));
       }
 
-     stampaCARATTERE(pigreco, 2);
+      stampaCARATTERE(pigreco, 2);
 
       stampaCARATTERE(omega, 3);
 
       while (digitalRead(button1) == LOW && digitalRead(button2) == LOW && digitalRead(button3) == LOW && digitalRead(button4) == LOW && digitalRead(button5) == LOW) {}
 
       // da qui aspetta input da parte dell'utente  || da sistemare
-      
-      if (digitalRead(button1) == HIGH) 
+
+      if (digitalRead(button1) == HIGH)
       {
         delay(200);
         Serial.println("1");
-        if(omega==0)
+        if (omega == 0)
         {
-         vita=vita-2;
+          vita = vita - 2;
         }
-        else if(pigreco!=0)
+        else if (pigreco != 0)
         {
-          vita=vita-1;
+          vita = vita - 1;
         }
       }
-      if (digitalRead(button2) == HIGH) 
+      if (digitalRead(button2) == HIGH)
       {
         delay(200);
-        if(omega==1)
+        if (omega == 1)
         {
-         vita=vita-2;
+          vita = vita - 2;
         }
-        else if(pigreco!=1)
+        else if (pigreco != 1)
         {
-          vita=vita-1;
+          vita = vita - 1;
         }
       }
-      if (digitalRead(button3) == HIGH) 
+      if (digitalRead(button3) == HIGH)
       {
         delay(200);
-        if(omega==2)
+        if (omega == 2)
         {
-         vita=vita-2;
+          vita = vita - 2;
         }
-        else if(pigreco!=2)
+        else if (pigreco != 2)
         {
-          vita=vita-1;
+          vita = vita - 1;
         }
       }
-      if (digitalRead(button4) == HIGH) 
+      if (digitalRead(button4) == HIGH)
       {
         delay(200);
-        if(omega==3)
+        if (omega == 3)
         {
-         vita=vita-2;
+          vita = vita - 2;
         }
-        else if(pigreco!=3)
+        else if (pigreco != 3)
         {
-          vita=vita-1;
+          vita = vita - 1;
         }
       }
-      if (digitalRead(button5) == HIGH) 
+      if (digitalRead(button5) == HIGH)
       {
-         delay(200);
-         if(omega==4)
+        delay(200);
+        if (omega == 4)
         {
-         vita=vita-2;
+          vita = vita - 2;
         }
-        else if(pigreco!=4)
+        else if (pigreco != 4)
         {
-          vita=vita-1;
+          vita = vita - 1;
         }
       }
 
     }
-    
-    
+
+
   }
 
 }
@@ -288,16 +287,16 @@ void Partita()
 void Continuare()
 {
   lcd.clear();
-  if (vittoria = 0)
+  if (vittoria < 1)
   {
-  lcd.setCursor(0, 0);
-  lcd.print("Ahia,hai perso");
-  lcd.setCursor(0, 1);
-  lcd.print("vuoi riprovare");
-  delay(1000);
-  lcd.setCursor(0, 1);
-  lcd.print("a vincere?    ");
-  delay(1000);
+    lcd.setCursor(0, 0);
+    lcd.print("Ahia,hai perso");
+    lcd.setCursor(0, 1);
+    lcd.print("vuoi riprovare");
+    delay(1000);
+    lcd.setCursor(0, 1);
+    lcd.print("a vincere?    ");
+    delay(1000);
   }
   lcd.setCursor(0, 0);
   lcd.print("btn1 - Riprova");
@@ -305,7 +304,7 @@ void Continuare()
   lcd.print("btn2 - Riavvio");
   while (digitalRead(button1) == LOW && digitalRead(button2) == LOW)
   {}
-  if (digitalRead(button2) == HIGH) 
+  if (digitalRead(button2) == HIGH)
   {
     continua++;
   }
@@ -313,24 +312,24 @@ void Continuare()
 
 void stampaCARATTERE(int carattere, int numByte)
 {
-   if (carattere == 0) // visualizzatore display
-      {
-        lcd.setCursor(1, 1); lcd.write(byte(numByte));
-      }
-      else if (carattere == 1)
-      {
-        lcd.setCursor(4, 1); lcd.write(byte(numByte));
-      }
-      else if (carattere == 2)
-      {
-        lcd.setCursor(7, 1); lcd.write(byte(numByte));
-      }
-      else if (carattere == 3)
-      {
-        lcd.setCursor(10, 1); lcd.write(byte(numByte));
-      }
-      else if (carattere == 4)
-      {
-        lcd.setCursor(13, 1); lcd.write(byte(numByte));
-      }
+  if (carattere == 0) // visualizzatore display
+  {
+    lcd.setCursor(1, 1); lcd.write(byte(numByte));
+  }
+  else if (carattere == 1)
+  {
+    lcd.setCursor(4, 1); lcd.write(byte(numByte));
+  }
+  else if (carattere == 2)
+  {
+    lcd.setCursor(7, 1); lcd.write(byte(numByte));
+  }
+  else if (carattere == 3)
+  {
+    lcd.setCursor(10, 1); lcd.write(byte(numByte));
+  }
+  else if (carattere == 4)
+  {
+    lcd.setCursor(13, 1); lcd.write(byte(numByte));
+  }
 }
