@@ -9,25 +9,19 @@ int vittoria = 0;
 int risF;
 int continua = 0;
 int Npartita = 1;
-
-
+bool presojolly = false;
+int vita;
+int tempo = 5000;
+int tt;
+int dt;
 byte Cuore[8] =
-{
-  B00000, B01010, B11111, B11111, B11111, B01110, B00100, B00000
-};
+{B00000, B01010, B11111, B11111, B11111, B01110, B00100, B00000};
 byte PiGreco[8] =
-{
-  B11111, B01010, B01010, B01010, B01010, B01010, B01010, B10000
-};
+{B11111, B01010, B01010, B01010, B01010, B01010, B01010, B10000};
 byte Omega[8] =
-{
-  B00000, B01110, B10001, B10001, B10001, B01010, B11011, B00000
-};
+{B00000, B01110, B10001, B10001, B10001, B01010, B11011, B00000};
 byte Smile[8] =
-{
-  B00000, B10001, B00000, B00000, B10001, B01110, B00000
-};
-
+{B00000, B10001, B00000, B00000, B10001, B01110, B00000};
 
 void setup()
 {
@@ -47,16 +41,16 @@ void setup()
 
 void loop()
 {
-  Inizio();
-  //Istruzioni();
+  inizio();
+  //istruzioni();
   while (continua == 0)
   {
-    Partita();
+    partita();
     Npartita++;
-    Continuare();
+    continuare();
   }
 }
-void Inizio()
+void inizio()
 {
   continua = 0;
   lcd.setCursor(0, 0);
@@ -65,13 +59,13 @@ void Inizio()
   lcd.write(byte(2));
   lcd.setCursor(0, 1);
   lcd.print("Premi un        ");
-  delay(1500);
+  delay(750);
   lcd.setCursor(0, 1);
   lcd.print("pulsante per    ");
-  delay(1500);
+  delay(750);
   lcd.setCursor(0, 1);
   lcd.print("iniziare        ");
-  delay(1500);
+  delay(750);
   lcd.setCursor(0, 1);
   lcd.print("                ");
 
@@ -81,9 +75,9 @@ void Inizio()
   lcd.print("Avvio gioco in ");
   lcd.setCursor(0, 1);
   lcd.print("corso          ");
-  delay(1000);
+  delay(750);
 }
-void Istruzioni()
+void istruzioni()
 {
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -144,7 +138,7 @@ void Istruzioni()
   lcd.print("max 5 vite     ");
   delay(1250);
 }
-void Partita()
+void partita()
 {
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -153,18 +147,19 @@ void Partita()
   lcd.print("in corso      ");
   delay(1000);
 
-
-  int vita = 3;
+  vita = 3;
   int omega = 0;
   int pigreco = 0;
-  int jolly = 0;
   int contatore = 1;
   int tempo = 4000;
-  bool presjolly = false;
+  int bkpigreco = -1;
+  int bkomega = -1;
 
   while (vita > 0)
   {
-    if (contatore == 20)
+    bool presjolly = false;
+    int jolly;
+    if (contatore == 19)
     {
       lcd.clear();
       lcd.setCursor(0, 0);
@@ -180,111 +175,100 @@ void Partita()
     lcd.print("Partita       ");
     lcd.setCursor(13, 0);
     lcd.print(contatore);
-    delay(750);
-    contatore++;
+    delay(600);
 
-
-    if (!presjolly)
+    if (contatore == 6 || contatore == 12 || contatore == 18)
     {
-      bool controllo = true; // assegnazione posizione
+      Serial.write("r");
+      presjolly = true;
+    }
+
+    bool controllo = true; // assegnazione posizione
+    while (controllo)
+    {
+      omega = random(0, 4);
+      pigreco = random(0, 4);
+      if (omega != pigreco && omega != bkomega && pigreco != bkpigreco)
+      {
+        controllo = false;
+      }
+    }
+
+    if (presjolly == true)
+    {
+      Serial.write("l");
+      controllo = true;
       while (controllo)
       {
-        omega = random(0, 4);
-        pigreco = random(0, 4);
-        if (omega != pigreco)
+        jolly = random(0, 4);
+        if ( jolly != pigreco && jolly != omega)
         {
           controllo = false;
         }
       }
-      if (vita > 5) // assegna vita
-      {
-        vita = 5;
-      }
-      lcd.clear();
-      for (int i = 0; i < vita; i++)
-      {
-        lcd.setCursor(15 - i, 0);
-        lcd.write(byte(1));
-      }
-
-      stampaCARATTERE(pigreco, 2);
-
-      stampaCARATTERE(omega, 3);
-
-      while (digitalRead(button1) == LOW && digitalRead(button2) == LOW && digitalRead(button3) == LOW && digitalRead(button4) == LOW && digitalRead(button5) == LOW) {}
-
-      // da qui aspetta input da parte dell'utente  || da sistemare
-
-      if (digitalRead(button1) == HIGH)
-      {
-        delay(200);
-        Serial.println("1");
-        if (omega == 0)
-        {
-          vita = vita - 2;
-        }
-        else if (pigreco != 0)
-        {
-          vita = vita - 1;
-        }
-      }
-      if (digitalRead(button2) == HIGH)
-      {
-        delay(200);
-        if (omega == 1)
-        {
-          vita = vita - 2;
-        }
-        else if (pigreco != 1)
-        {
-          vita = vita - 1;
-        }
-      }
-      if (digitalRead(button3) == HIGH)
-      {
-        delay(200);
-        if (omega == 2)
-        {
-          vita = vita - 2;
-        }
-        else if (pigreco != 2)
-        {
-          vita = vita - 1;
-        }
-      }
-      if (digitalRead(button4) == HIGH)
-      {
-        delay(200);
-        if (omega == 3)
-        {
-          vita = vita - 2;
-        }
-        else if (pigreco != 3)
-        {
-          vita = vita - 1;
-        }
-      }
-      if (digitalRead(button5) == HIGH)
-      {
-        delay(200);
-        if (omega == 4)
-        {
-          vita = vita - 2;
-        }
-        else if (pigreco != 4)
-        {
-          vita = vita - 1;
-        }
-      }
-
     }
 
+    if (vita > 5) // assegna vita
+    {
+      vita = 5;
+    }
+    lcd.clear();
+    for (int i = 0; i < vita; i++)
+    {
+      lcd.setCursor(15 - i, 0);
+      lcd.write(byte(1));
+    }
 
+    stampaCARATTERE(pigreco, 2);
+    stampaCARATTERE(omega, 3);
+
+    if (presjolly == true)
+    {
+      Serial.write("s");
+      stampaCARATTERE(jolly, 4);
+    }
+    tt = millis();
+    double tempo1 = false;
+    while (digitalRead(button1) == LOW && digitalRead(button2) == LOW && digitalRead(button3) == LOW && digitalRead(button4) == LOW && digitalRead(button5) == LOW) {}
+    dt = millis();
+    if (dt - tt > tempo && presjolly==false)
+    {
+      vita--;
+      lcd.setCursor(0, 0);
+      lcd.print("Tempo!!");
+      tempo1 == true;
+    }
+    boton (0, button1, omega, pigreco, jolly, presjolly, tempo1);
+    boton (1, button2, omega, pigreco, jolly, presjolly, tempo1);
+    boton (2, button3, omega, pigreco, jolly, presjolly, tempo1);
+    boton (3, button4, omega, pigreco, jolly, presjolly, tempo1);
+    boton (4, button5, omega, pigreco, jolly, presjolly, tempo1);
+
+    if (presjolly == true)
+    {
+      while (digitalRead(button1) == LOW && digitalRead(button2) == LOW && digitalRead(button3) == LOW && digitalRead(button4) == LOW && digitalRead(button5) == LOW) {}
+      dt = millis();
+      if (dt - tt > tempo)
+      {
+        vita--;
+        lcd.setCursor(0, 0);
+        lcd.print("Tempo!!");
+        tempo1 == true;
+      }
+      boton (0, button1, omega, pigreco, jolly, false, tempo1);
+      boton (1, button2, omega, pigreco, jolly, false, tempo1);
+      boton (2, button3, omega, pigreco, jolly, false, tempo1);
+      boton (3, button4, omega, pigreco, jolly, false, tempo1);
+      boton (4, button5, omega, pigreco, jolly, false, tempo1);
+    }
+    bkpigreco = pigreco;
+    bkomega = omega;
+    contatore++;
+    tempo = tempo - 200;
   }
-
 }
 
-void Continuare()
+void continuare()
 {
   lcd.clear();
   if (vittoria < 1)
@@ -312,7 +296,7 @@ void Continuare()
 
 void stampaCARATTERE(int carattere, int numByte)
 {
-  if (carattere == 0) // visualizzatore display
+  if (carattere == 0)
   {
     lcd.setCursor(1, 1); lcd.write(byte(numByte));
   }
@@ -331,5 +315,27 @@ void stampaCARATTERE(int carattere, int numByte)
   else if (carattere == 4)
   {
     lcd.setCursor(13, 1); lcd.write(byte(numByte));
+  }
+}
+
+int boton (int num, int boton, int omega1, int pigreco1, int jolly1, bool presjolly1, double tempo1)
+{
+  if (digitalRead(boton) == HIGH && tempo1 == false)
+  {
+    delay(200);
+    if (omega1 == num)
+    {
+      vita = vita - 2;
+    }
+    else if (pigreco1 != num && jolly1 != num)
+    {
+      vita--;
+    }
+    else if (presjolly1 == true && jolly1 == num)
+    {
+      Serial.write("c");
+      presojolly = true;
+      vita++;
+    }
   }
 }
