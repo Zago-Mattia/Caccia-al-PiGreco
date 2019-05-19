@@ -14,6 +14,7 @@ int vita;
 int tempo = 5000;
 int tt;
 int dt;
+int record=0;
 byte Cuore[8] =
 {B00000, B01010, B11111, B11111, B11111, B01110, B00100, B00000};
 byte PiGreco[8] =
@@ -161,18 +162,32 @@ void partita()
     int jolly;
     if (contatore == 19)
     {
+      if (vita>record)
+      {
+        record = vita;
+      }
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Record attuale:");
+      lcd.setCursor(15, 0);
+      lcd.print(record);
+      lcd.setCursor(0, 1);
+      lcd.print("Vite rimaste:0");
+      lcd.setCursor(15, 1);
+      lcd.print(vita);
+      delay(1250);
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("COMPLIMENTI   ");
       lcd.setCursor(0, 1);
       lcd.print("HAI VINTO!!!  ");
       vittoria ++;
-      delay(1000);
+      delay(1250);
       return;
     }
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Partita       ");
+    lcd.print("Livello       ");
     lcd.setCursor(13, 0);
     lcd.print(contatore);
     delay(600);
@@ -186,8 +201,8 @@ void partita()
     bool controllo = true; // assegnazione posizione
     while (controllo)
     {
-      omega = random(0, 4);
-      pigreco = random(0, 4);
+      omega = random(0, 5);
+      pigreco = random(0, 5);
       if (omega != pigreco && omega != bkomega && pigreco != bkpigreco)
       {
         controllo = false;
@@ -196,11 +211,10 @@ void partita()
 
     if (presjolly == true)
     {
-      Serial.write("l");
       controllo = true;
       while (controllo)
       {
-        jolly = random(0, 4);
+        jolly = random(0, 5);
         if ( jolly != pigreco && jolly != omega)
         {
           controllo = false;
@@ -229,22 +243,24 @@ void partita()
     }
     tt = millis();
     double tempo1 = false;
+
     while (digitalRead(button1) == LOW && digitalRead(button2) == LOW && digitalRead(button3) == LOW && digitalRead(button4) == LOW && digitalRead(button5) == LOW) {}
     dt = millis();
-    if (dt - tt > tempo && presjolly==false)
+    if (dt - tt > tempo && presjolly == false)
     {
       vita--;
       lcd.setCursor(0, 0);
       lcd.print("Tempo!!");
+      delay(500);
       tempo1 == true;
     }
-    boton (0, button1, omega, pigreco, jolly, presjolly, tempo1);
-    boton (1, button2, omega, pigreco, jolly, presjolly, tempo1);
-    boton (2, button3, omega, pigreco, jolly, presjolly, tempo1);
-    boton (3, button4, omega, pigreco, jolly, presjolly, tempo1);
-    boton (4, button5, omega, pigreco, jolly, presjolly, tempo1);
+    button (0, button1, omega, pigreco, jolly, presjolly, tempo1);
+    button (1, button2, omega, pigreco, jolly, presjolly, tempo1);
+    button (2, button3, omega, pigreco, jolly, presjolly, tempo1);
+    button (3, button4, omega, pigreco, jolly, presjolly, tempo1);
+    button (4, button5, omega, pigreco, jolly, presjolly, tempo1);
 
-    if (presjolly == true)
+    if (presjolly == true && tempo1 == false)
     {
       while (digitalRead(button1) == LOW && digitalRead(button2) == LOW && digitalRead(button3) == LOW && digitalRead(button4) == LOW && digitalRead(button5) == LOW) {}
       dt = millis();
@@ -253,13 +269,14 @@ void partita()
         vita--;
         lcd.setCursor(0, 0);
         lcd.print("Tempo!!");
+        delay(500);
         tempo1 == true;
       }
-      boton (0, button1, omega, pigreco, jolly, false, tempo1);
-      boton (1, button2, omega, pigreco, jolly, false, tempo1);
-      boton (2, button3, omega, pigreco, jolly, false, tempo1);
-      boton (3, button4, omega, pigreco, jolly, false, tempo1);
-      boton (4, button5, omega, pigreco, jolly, false, tempo1);
+      button (0, button1, omega, pigreco, jolly, false, tempo1);
+      button (1, button2, omega, pigreco, jolly, false, tempo1);
+      button (2, button3, omega, pigreco, jolly, false, tempo1);
+      button (3, button4, omega, pigreco, jolly, false, tempo1);
+      button (4, button5, omega, pigreco, jolly, false, tempo1);
     }
     bkpigreco = pigreco;
     bkomega = omega;
@@ -318,9 +335,9 @@ void stampaCARATTERE(int carattere, int numByte)
   }
 }
 
-int boton (int num, int boton, int omega1, int pigreco1, int jolly1, bool presjolly1, double tempo1)
+int button (int num, int button, int omega1, int pigreco1, int jolly1, bool presjolly1, double tempo1)
 {
-  if (digitalRead(boton) == HIGH && tempo1 == false)
+  if (digitalRead(button) == HIGH && tempo1 == false)
   {
     delay(200);
     if (omega1 == num)
@@ -333,7 +350,6 @@ int boton (int num, int boton, int omega1, int pigreco1, int jolly1, bool presjo
     }
     else if (presjolly1 == true && jolly1 == num)
     {
-      Serial.write("c");
       presojolly = true;
       vita++;
     }
