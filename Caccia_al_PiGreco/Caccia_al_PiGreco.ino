@@ -162,17 +162,17 @@ void partita()
     int jolly;
     if (contatore == 19)
     {
-      if (vita>record)
+      if (contatore>record)
       {
         record = vita;
       }
       lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print("Record attuale:");
+      lcd.print("Record:");
       lcd.setCursor(15, 0);
       lcd.print(record);
       lcd.setCursor(0, 1);
-      lcd.print("Vite rimaste:0");
+      lcd.print("Partita:");
       lcd.setCursor(15, 1);
       lcd.print(vita);
       delay(1250);
