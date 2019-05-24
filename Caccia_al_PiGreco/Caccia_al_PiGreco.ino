@@ -14,7 +14,6 @@ int vita;
 int tempo = 5000;
 int tt;
 int dt;
-int record=0;
 byte Cuore[8] =
 {B00000, B01010, B11111, B11111, B11111, B01110, B00100, B00000};
 byte PiGreco[8] =
@@ -43,7 +42,7 @@ void setup()
 void loop()
 {
   inizio();
-  //istruzioni();
+  istruzioni();
   while (continua == 0)
   {
     partita();
@@ -162,20 +161,6 @@ void partita()
     int jolly;
     if (contatore == 19)
     {
-      if (contatore>record)
-      {
-        record = vita;
-      }
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Record:");
-      lcd.setCursor(15, 0);
-      lcd.print(record);
-      lcd.setCursor(0, 1);
-      lcd.print("Partita:");
-      lcd.setCursor(15, 1);
-      lcd.print(vita);
-      delay(1250);
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("COMPLIMENTI   ");
